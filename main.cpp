@@ -1,6 +1,9 @@
 #include "interface.hpp"
 
 int main(){
-  Tablero juego(2, 3);
+
+  Tablero hola(8, 8);
+  hola.mostrartablero();
+
   return 0;
 }
