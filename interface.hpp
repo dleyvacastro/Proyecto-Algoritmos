@@ -32,12 +32,14 @@ struct casilla{
 class Tablero{
 private:
   casilla *inicio;
-  int largo;
-  int ancho;
+  int columnas;
+  int filas;
+  int size;
   void inicializar_casillas();
 public:
   Tablero(int n, int m);
   ~Tablero();
+  void mostrartablero();
 };
 
 
