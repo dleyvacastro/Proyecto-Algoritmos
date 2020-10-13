@@ -2,6 +2,7 @@
 #define _INTERFACE_HPP_
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +15,10 @@ struct casilla{
   //turno en que el caballo esta en la casilla
   int turno;
 
-  //adyacencia
+  //Vector que guarda los apuntadores a las casillas a las que se puede mover
+  vector<casilla *> ady;
+
+  //apuntadores a las casillas
   //cuadrante arriba a la izquierda
   casilla *ai;
   casilla *ad;
