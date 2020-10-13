@@ -33,53 +33,37 @@ void Tablero::inicializar_casillas(){
     inicio[i] = c;
   }
 
-  //for que inicializa los puntores de cada casilla
-  for(int i = 0; i < size; i++){
-    //if que inicializa el puntero de la casilla del cuadrante d derecha
+  //for que inicializa los punteros de cada casilla
+  for(int i = 0; i < size - columnas; i++){
+    //if que inicializa el puntero de la casilla del cuadrante d derecha y su espejo
     if((inicio[i].x + 2) >= 0 && (inicio[i].x + 2) < columnas && (inicio[i].y + 1) >= 0 && (inicio[i].y + 1) < filas ){
       int j = (columnas * (inicio[i].y+1)) + inicio[i].x + 2;
       inicio[i].dd = &inicio[j];
+      inicio[j].ai = &inicio[i];
     }
-    //if que inicializa el puntero de la casilla del cuadrante b derecha
-    if((inicio[i].x + 2) >= 0 && (inicio[i].x + 2) < columnas && (inicio[i].y - 1) >= 0 && (inicio[i].y - 1) < filas ){
-      int j = (columnas * (inicio[i].y-1)) + inicio[i].x + 2;
-      inicio[i].bd = &inicio[j];
-    }
-    //if que inicializa el puntero de la casilla del cuadrante c izquierda
-    if((inicio[i].x - 2) >= 0 && (inicio[i].x - 2) < columnas && (inicio[i].y + 1) >= 0 && (inicio[i].y + 1) < filas ){
-      int j = (columnas * (inicio[i].y+1)) + inicio[i].x - 2;
-      inicio[i].ci = &inicio[j];
-    }
-    //if que inicializa el puntero de la casilla del cuadrante a izquierda
-    if((inicio[i].x - 2) >= 0 && (inicio[i].x - 2) < columnas && (inicio[i].y - 1) >= 0 && (inicio[i].y - 1) < filas ){
-      int j = (columnas * (inicio[i].y-1)) + inicio[i].x - 2;
-      inicio[i].ai = &inicio[j];
-    }
-    //if que inicializa el puntero de la casilla del cuadrante d izquierda
+    //if que inicializa el puntero de la casilla del cuadrante d izquierda y su espejo
     if((inicio[i].x + 1) >= 0 && (inicio[i].x + 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x + 1;
       inicio[i].di = &inicio[j];
+      inicio[j].ad = &inicio[i];
     }
-    //if que inicializa el puntero de la casilla del cuadrante c derecha
+    //if que inicializa el puntero de la casilla del cuadrante c derecha y su espejo
     if((inicio[i].x - 1) >= 0 && (inicio[i].x - 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x - 1;
       inicio[i].cd = &inicio[j];
+      inicio[j].bi = &inicio[i];
     }
-    //if que inicializa el puntero de la casilla del cuadrante b izquierda
-    if((inicio[i].x + 1) >= 0 && (inicio[i].x + 1) < columnas && (inicio[i].y - 2) >= 0 && (inicio[i].y - 2) < filas ){
-      int j = (columnas * (inicio[i].y-2)) + inicio[i].x + 1;
-      inicio[i].bi = &inicio[j];
-    }
-    //if que inicializa el puntero de la casilla del cuadrante a derecha
-    if((inicio[i].x - 1) >= 0 && (inicio[i].x - 1) < columnas && (inicio[i].y - 2) >= 0 && (inicio[i].y - 2) < filas ){
-      int j = (columnas * (inicio[i].y-2)) + inicio[i].x - 1;
-      inicio[i].ad = &inicio[j];
+    //if que inicializa el puntero de la casilla del cuadrante c izquierda y su espejo
+    if((inicio[i].x - 2) >= 0 && (inicio[i].x - 2) < columnas && (inicio[i].y + 1) >= 0 && (inicio[i].y + 1) < filas ){
+      int j = (columnas * (inicio[i].y+1)) + inicio[i].x - 2;
+      inicio[i].ci = &inicio[j];
+      inicio[j].bd = &inicio[i];
     }
   }
 }
 
 void Tablero::mostrartablero(){
-  //este for imprimer el tablero con indices y coordenadas
+  //este for imprime el tablero con indices y coordenadas
   for(int i = 0; i < size; i++){
     if(i % columnas == 0 ){
       cout << endl;
