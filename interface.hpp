@@ -36,6 +36,7 @@ struct casilla{
 class Tablero{
 private:
   casilla *inicio;
+  casilla *inicial;
   int columnas;
   int filas;
   int size;
@@ -44,16 +45,20 @@ public:
   Tablero(int n, int m);
   ~Tablero();
   void mostrartablero();
+  void set_inicial(int x, int y);
+  casilla * get_inicial();
 };
 
 class ArbolD{
 private:
   casilla *raiz;
-  Tablero T;
-  void podarramas();
+  Tablero *T;
+  void podarrama();
+  bool crea_camino(casilla *c, int t);
 public:
-  ArbolD(int n, int m, casilla k);
-  ~ArbolD();
+  ArbolD(Tablero k);
+  ~ArbolD() {}
+  bool crear_caminos();
 };
 
 

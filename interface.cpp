@@ -1,6 +1,7 @@
 #include "interface.hpp"
 
-  
+//Tablero
+//##############################################################################################
 Tablero::Tablero(int n, int m){
   columnas = n;
   filas = m;
@@ -62,13 +63,25 @@ void Tablero::inicializar_casillas(){
   }
 }
 
+//Establece la casilla inicial del camino
+void Tablero::set_inicial(int x, int y){
+  int i = columnas * y + x;
+  inicial = &inicio[i];
+  inicio[i].turno = 0;
+}
+
+//Retorna la casilla inicial
+casilla * Tablero::get_inicial(){
+  return inicial;
+}
+
 void Tablero::mostrartablero(){
   //este for imprime el tablero con indices y coordenadas
   for(int i = 0; i < size; i++){
     if(i % columnas == 0 ){
       cout << endl;
     }
-    cout << " [" << i << ": " << inicio[i].x << ", " << inicio[i].y << "] ";
+    cout << " [" << i << ": " << inicio[i].x << ", " << inicio[i].y << ", " << inicio[i].turno << "] ";
   }
   cout << endl;
 
@@ -110,3 +123,15 @@ void Tablero::mostrartablero(){
   }
   cout << endl;
 }
+
+//##############################################################################################
+
+//ArbolD
+//##############################################################################################
+
+ArbolD::ArbolD(Tablero k){
+  T = &k;
+  raiz = k.get_inicial();
+}
+
+// bool ArbolD::crear_caminos(casilla *)
