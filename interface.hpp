@@ -46,6 +46,15 @@ public:
   void mostrartablero();
 };
 
+class ArbolD{
+private:
+  casilla *raiz;
+  Tablero T;
+  void podarramas();
+public:
+  ArbolD(int n, int m, casilla k);
+  ~ArbolD();
+};
 
 
 #endif
