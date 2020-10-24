@@ -1,6 +1,6 @@
 #include "interface.hpp"
 
-
+  
 Tablero::Tablero(int n, int m){
   columnas = n;
   filas = m;
