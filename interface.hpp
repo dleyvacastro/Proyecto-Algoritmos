@@ -1,4 +1,4 @@
-#ifndef _INTERFACE_HPP_
+ifndef _INTERFACE_HPP_
 #define _INTERFACE_HPP_
 #include <iostream>
 #include <stdexcept>
@@ -14,9 +14,6 @@ struct casilla{
   int y;
   //turno en que el caballo esta en la casilla
   int turno;
-
-  //Vector que guarda los apuntadores a las casillas a las que se puede mover
-  vector<casilla *> ady;
 
   //apuntadores a las casillas
   //cuadrante arriba a la izquierda
@@ -47,19 +44,46 @@ public:
   void mostrartablero();
   void set_inicial(int x, int y);
   casilla * get_inicial();
+  casilla * get_inicio();
+  int get_size();
+};
+
+struct Nodo{
+  //indice en el arreglo
+  int indice;
+  //coordenada (x,y)
+  int x;
+  int y;
+  //turno en que el caballo esta en la casilla
+  int turno;
+
+  //apuntadores a las casillas
+  //cuadrante arriba a la izquierda
+  Nodo *ai;
+  Nodo *ad;
+  //cuadrante arriba a la derecha
+  Nodo *bi;
+  Nodo *bd;
+  //cuadrante abajo a la izquierda
+  Nodo *ci;
+  Nodo *cd;
+  //cuadrante abajo a la derecha
+  Nodo *di;
+  Nodo *dd;
 };
 
 class ArbolD{
 private:
-  casilla *raiz;
+  Nodo *raiz;
   Tablero *T;
-  void podarrama();
-  bool crea_camino(casilla *c, int t);
+  void podarrama(Nodo* &n);
+  bool crea_camino(casilla *c, Nodo* &n, int t);
 public:
-  ArbolD(Tablero k);
-  ~ArbolD() {}
-  bool crear_caminos();
+  ArbolD(Tablero *k);
+  ~ArbolD();
+  void crear_caminos();
 };
 
+Nodo * inicia_nodo(casilla *c);
 
 #endif
