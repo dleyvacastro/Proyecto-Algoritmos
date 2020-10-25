@@ -1,4 +1,4 @@
-#ifndef _INTERFACE_HPP_
+ifndef _INTERFACE_HPP_
 #define _INTERFACE_HPP_
 #include <iostream>
 #include <stdexcept>
