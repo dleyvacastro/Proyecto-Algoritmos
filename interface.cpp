@@ -11,7 +11,7 @@ Tablero::Tablero(int n, int m){
 }
 
 Tablero::~Tablero(){
-  cout << "no me quiero ir señor stark";
+  cout << "Destruyendo tablero\n";
   delete[] inicio;
 }
 
@@ -149,13 +149,13 @@ ArbolD::ArbolD(Tablero *k){
 //Destructor
 ArbolD::~ArbolD(){
   podarrama(raiz);
-  cout << "*c muere*\n";
+  cout << "destruyendo arbol\n";
 }
 
 //Poda una rama desde un nodo, recursivamente
 void ArbolD::podarrama(Nodo* &n){
   if(n != nullptr){
-    cout << "borrando " <<  n->x << ", " << n->y << endl;
+    // cout << "borrando " <<  n->x << ", " << n->y << endl;
     podarrama(n->ai);
     podarrama(n->ad);
     podarrama(n->bi);
@@ -171,61 +171,81 @@ void ArbolD::podarrama(Nodo* &n){
 
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
 bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
-  cout << n->x << ", " << n->y << ", " << t << endl;
+  // cout << n->x << ", " << n->y << ", " << t << endl;
   n->turno = t;
   c->turno = t;
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
+  if (solucion == true){
+    cout << "camino hallado\n";
+    return true;
+  }
   //Revisa si se puede mover a las casillas
   //Hacia la ai
   if (c->ai != nullptr && c->ai->turno == -1){
     n->ai = inicia_nodo(c->ai);
     //crea el camino a partir del siguiente paso
-    if(crea_camino(c->ai, n->ai, t+1))
-      //si ese camino era solucion este nodo es olucion
+    if(crea_camino(c->ai, n->ai, t+1)){
+      //si ese camino era solucion este nodo es solucion
       solucion = true;
+      return true;
+    }
   }
   //Hacia ad
   if (c->ad != nullptr && c->ad->turno == -1){
     n->ad = inicia_nodo(c->ad);
-    if(crea_camino(c->ad, n->ad, t+1))
+    if(crea_camino(c->ad, n->ad, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia bi
   if (c->bi != nullptr && c->bi->turno == -1){
     n->bi = inicia_nodo(c->bi);
-    if(crea_camino(c->bi, n->bi, t+1))
+    if(crea_camino(c->bi, n->bi, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia bd
   if (c->bd != nullptr && c->bd->turno == -1){
     n->bd = inicia_nodo(c->bd);
-    if(crea_camino(c->bd, n->bd, t+1))
+    if(crea_camino(c->bd, n->bd, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia ci
   if (c->ci != nullptr && c->ci->turno == -1){
     n->ci = inicia_nodo(c->ci);
-    if(crea_camino(c->ci, n->ci, t+1))
+    if(crea_camino(c->ci, n->ci, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia cd
   if (c->cd != nullptr && c->cd->turno == -1){
     n->cd = inicia_nodo(c->cd);
-    if(crea_camino(c->cd, n->cd, t+1))
+    if(crea_camino(c->cd, n->cd, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia di
   if (c->di != nullptr && c->di->turno == -1){
     n->di = inicia_nodo(c->di);
-    if(crea_camino(c->di, n->di, t+1))
+    if(crea_camino(c->di, n->di, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Hacia dd
   if (c->dd != nullptr && c->dd->turno == -1){
     n->dd = inicia_nodo(c->dd);
-    if(crea_camino(c->dd, n->dd, t+1))
+    if(crea_camino(c->dd, n->dd, t+1)){
       solucion = true;
+      return true;
+    }
   }
   //Si por ese nodo no se llega a una solucion, lo borra
   if(!solucion){
