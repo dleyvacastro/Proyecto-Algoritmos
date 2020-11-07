@@ -23,6 +23,7 @@ void Tablero::inicializar_casillas(){
     c.x = i % columnas;
     c.y = i / columnas;
     c.turno = -1;
+    c.posibles = 0;
     c.ai = nullptr;
     c.ad = nullptr;
     c.bi = nullptr;
@@ -41,24 +42,32 @@ void Tablero::inicializar_casillas(){
       int j = (columnas * (inicio[i].y+1)) + inicio[i].x + 2;
       inicio[i].dd = &inicio[j];
       inicio[j].ai = &inicio[i];
+      inicio[i].posibles++;
+      inicio[j].posibles++;
     }
     //if que inicializa el puntero de la casilla del cuadrante d izquierda y su espejo
     if((inicio[i].x + 1) >= 0 && (inicio[i].x + 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x + 1;
       inicio[i].di = &inicio[j];
       inicio[j].ad = &inicio[i];
+      inicio[i].posibles++;
+      inicio[j].posibles++;
     }
     //if que inicializa el puntero de la casilla del cuadrante c derecha y su espejo
     if((inicio[i].x - 1) >= 0 && (inicio[i].x - 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x - 1;
       inicio[i].cd = &inicio[j];
       inicio[j].bi = &inicio[i];
+      inicio[i].posibles++;
+      inicio[j].posibles++;
     }
     //if que inicializa el puntero de la casilla del cuadrante c izquierda y su espejo
     if((inicio[i].x - 2) >= 0 && (inicio[i].x - 2) < columnas && (inicio[i].y + 1) >= 0 && (inicio[i].y + 1) < filas ){
       int j = (columnas * (inicio[i].y+1)) + inicio[i].x - 2;
       inicio[i].ci = &inicio[j];
       inicio[j].bd = &inicio[i];
+      inicio[i].posibles++;
+      inicio[j].posibles++;
     }
   }
 }
@@ -156,14 +165,7 @@ ArbolD::~ArbolD(){
 void ArbolD::podarrama(Nodo* &n){
   if(n != nullptr){
     // cout << "borrando " <<  n->x << ", " << n->y << endl;
-    podarrama(n->ai);
-    podarrama(n->ad);
-    podarrama(n->bi);
-    podarrama(n->bd);
-    podarrama(n->ci);
-    podarrama(n->cd);
-    podarrama(n->di);
-    podarrama(n->dd);
+    podarrama(n->next);
     delete n;
     n = nullptr;
   }
@@ -174,79 +176,88 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   // cout << n->x << ", " << n->y << ", " << t << endl;
   n->turno = t;
   c->turno = t;
+  int min_mov = 9;
+  casilla *next = nullptr;
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
-  if (solucion == true){
+  if (solucion){
     cout << "camino hallado\n";
     return true;
   }
   //Revisa si se puede mover a las casillas
   //Hacia la ai
-  if (c->ai != nullptr && c->ai->turno == -1){
-    n->ai = inicia_nodo(c->ai);
-    //crea el camino a partir del siguiente paso
-    if(crea_camino(c->ai, n->ai, t+1)){
-      //si ese camino era solucion este nodo es solucion
-      solucion = true;
-      return true;
-    }
+  if (c->ai != nullptr && c->ai->turno == -1 && c->ai->posibles < min_mov){
+    n->next = inicia_nodo(c->ai);
+    min_mov = c->ai->posibles;
+    next = c->ai;
   }
   //Hacia ad
-  if (c->ad != nullptr && c->ad->turno == -1){
-    n->ad = inicia_nodo(c->ad);
-    if(crea_camino(c->ad, n->ad, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->ad != nullptr && c->ad->turno == -1 && c->ad->posibles < min_mov){
+    n->next = inicia_nodo(c->ad);
+    min_mov = c->ad->posibles;
+    next = c->ad;
   }
   //Hacia bi
-  if (c->bi != nullptr && c->bi->turno == -1){
-    n->bi = inicia_nodo(c->bi);
-    if(crea_camino(c->bi, n->bi, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->bi != nullptr && c->bi->turno == -1 && c->bi->posibles < min_mov){
+    n->next = inicia_nodo(c->bi);
+    min_mov = c->bi->posibles;
+    next = c->bi;
   }
   //Hacia bd
-  if (c->bd != nullptr && c->bd->turno == -1){
-    n->bd = inicia_nodo(c->bd);
-    if(crea_camino(c->bd, n->bd, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->bd != nullptr && c->bd->turno == -1 && c->bd->posibles < min_mov){
+    n->next = inicia_nodo(c->bd);
+    min_mov = c->bd->posibles;
+    next = c->bd;
   }
   //Hacia ci
-  if (c->ci != nullptr && c->ci->turno == -1){
-    n->ci = inicia_nodo(c->ci);
-    if(crea_camino(c->ci, n->ci, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->ci != nullptr && c->ci->turno == -1 && c->ci->posibles < min_mov){
+    n->next = inicia_nodo(c->ci);
+    min_mov = c->ci->posibles;
+    next = c->ci;
   }
   //Hacia cd
-  if (c->cd != nullptr && c->cd->turno == -1){
-    n->cd = inicia_nodo(c->cd);
-    if(crea_camino(c->cd, n->cd, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->cd != nullptr && c->cd->turno == -1 && c->cd->posibles < min_mov){
+    n->next = inicia_nodo(c->cd);
+    min_mov = c->cd->posibles;
+    next = c->cd;
   }
   //Hacia di
-  if (c->di != nullptr && c->di->turno == -1){
-    n->di = inicia_nodo(c->di);
-    if(crea_camino(c->di, n->di, t+1)){
-      solucion = true;
-      return true;
-    }
+  if (c->di != nullptr && c->di->turno == -1 && c->di->posibles < min_mov){
+    n->next = inicia_nodo(c->di);
+    min_mov = c->di->posibles;
+    next = c->di;
   }
   //Hacia dd
-  if (c->dd != nullptr && c->dd->turno == -1){
-    n->dd = inicia_nodo(c->dd);
-    if(crea_camino(c->dd, n->dd, t+1)){
-      solucion = true;
-      return true;
-    }
+  if(c->dd != nullptr && c->dd->turno == -1 && c->dd->posibles < min_mov){
+    n->next = inicia_nodo(c->dd);
+    min_mov = c->dd->posibles;
+    next = c->dd;
   }
+  if(next->ai != nullptr && next->ai->turno == -1){
+    next->ai->posibles--;
+  }
+  if(next->ad != nullptr && next->ad->turno == -1){
+    next->ad->posibles--;
+  }
+  if(next->bi != nullptr && next->bi->turno == -1){
+    next->bi->posibles--;
+  }
+  if(next->bd != nullptr && next->bd->turno == -1){
+    next->bd->posibles--;
+  }
+  if(next->ci != nullptr && next->ci->turno == -1){
+    next->ci->posibles--;
+  }
+  if(next->cd != nullptr && next->cd->turno == -1){
+    next->cd->posibles--;
+  }
+  if(next->di != nullptr && next->di->turno == -1){
+    next->di->posibles--;
+  }
+  if(next->dd != nullptr && next->dd->turno == -1){
+    next->dd->posibles--;
+  }
+  crea_camino(next, n->next, t+1);
   //Si por ese nodo no se llega a una solucion, lo borra
   if(!solucion){
     podarrama(n);
@@ -272,14 +283,7 @@ Nodo * inicia_nodo(casilla *c){
   n->indice = c->indice;
   n->x = c->x;
   n->y = c->y;
-  n->ai = nullptr;
-  n->ad = nullptr;
-  n->bi = nullptr;
-  n->bd = nullptr;
-  n->ci = nullptr;
-  n->cd = nullptr;
-  n->di = nullptr;
-  n->dd = nullptr;
+  n->next = nullptr;
   return n;
 }
 //##############################################################################################

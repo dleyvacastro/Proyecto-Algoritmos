@@ -15,6 +15,9 @@ struct casilla{
   //turno en que el caballo esta en la casilla
   int turno;
 
+  //Numero de movimientos posibles en esa casilla
+  int posibles;
+
   //apuntadores a las casillas
   //cuadrante arriba a la izquierda
   casilla *ai;
@@ -57,19 +60,8 @@ struct Nodo{
   //turno en que el caballo esta en la casilla
   int turno;
 
-  //apuntadores a las casillas
-  //cuadrante arriba a la izquierda
-  Nodo *ai;
-  Nodo *ad;
-  //cuadrante arriba a la derecha
-  Nodo *bi;
-  Nodo *bd;
-  //cuadrante abajo a la izquierda
-  Nodo *ci;
-  Nodo *cd;
-  //cuadrante abajo a la derecha
-  Nodo *di;
-  Nodo *dd;
+  //apuntadores a la siguiente casilla del camino
+  Nodo *next;
 };
 
 class ArbolD{
