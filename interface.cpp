@@ -144,6 +144,16 @@ void Tablero::mostrartablero(){
   cout << endl;
 }
 
+void Tablero::print_sol(){
+  for(int i = 0; i < size; i++){
+    if(i % columnas == 0 ){
+      cout << endl;
+    }
+    cout << inicio[i].turno << " ";
+  }
+  cout << endl;
+}
+
 //##############################################################################################
 
 
@@ -165,7 +175,8 @@ ArbolD::~ArbolD(){
 void ArbolD::podarrama(Nodo* &n){
   if(n != nullptr){
     // cout << "borrando " <<  n->x << ", " << n->y << endl;
-    podarrama(n->next);
+    for(int i = 0; i < n->next.size(); i++)
+      podarrama(n->next[i]);
     delete n;
     n = nullptr;
   }
@@ -177,95 +188,164 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   n->turno = t;
   c->turno = t;
   int min_mov = 9;
-  casilla *next = nullptr;
+  Nodo *nextn = nullptr;
+  vector<casilla*> cas;
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
   if (solucion){
     cout << "camino hallado\n";
     return true;
   }
+  //Reduce el numero de posibilidades de las casillas alrededor
+  if(c->ai != nullptr && c->ai->turno == -1){
+    c->ai->posibles--;
+  }
+  if(c->ad != nullptr && c->ad->turno == -1){
+    c->ad->posibles--;
+  }
+  if(c->bi != nullptr && c->bi->turno == -1){
+    c->bi->posibles--;
+  }
+  if(c->bd != nullptr && c->bd->turno == -1){
+    c->bd->posibles--;
+  }
+  if(c->ci != nullptr && c->ci->turno == -1){
+    c->ci->posibles--;
+  }
+  if(c->cd != nullptr && c->cd->turno == -1){
+    c->cd->posibles--;
+  }
+  if(c->di != nullptr && c->di->turno == -1){
+    c->di->posibles--;
+  }
+  if(c->dd != nullptr &&c->dd->turno == -1){
+    c->dd->posibles--;
+  }
   //Revisa si se puede mover a las casillas
   //Hacia la ai
-  if (c->ai != nullptr && c->ai->turno == -1 && c->ai->posibles < min_mov){
-    n->next = inicia_nodo(c->ai);
-    min_mov = c->ai->posibles;
-    next = c->ai;
+  if (c->ai != nullptr && c->ai->turno == -1 && c->ai->posibles <= min_mov){
+    if(c->ai->posibles < min_mov){
+      min_mov = c->ai->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->ai);
+    n->next.push_back(nextn);
+    cas.push_back(c->ai);
   }
   //Hacia ad
-  if (c->ad != nullptr && c->ad->turno == -1 && c->ad->posibles < min_mov){
-    n->next = inicia_nodo(c->ad);
-    min_mov = c->ad->posibles;
-    next = c->ad;
+  if (c->ad != nullptr && c->ad->turno == -1 && c->ad->posibles <= min_mov){
+    if(c->ad->posibles < min_mov){
+      min_mov = c->ad->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->ad);
+    n->next.push_back(nextn);
+    cas.push_back(c->ad);
   }
   //Hacia bi
-  if (c->bi != nullptr && c->bi->turno == -1 && c->bi->posibles < min_mov){
-    n->next = inicia_nodo(c->bi);
-    min_mov = c->bi->posibles;
-    next = c->bi;
+  if (c->bi != nullptr && c->bi->turno == -1 && c->bi->posibles <= min_mov){
+    if(c->bi->posibles < min_mov){
+      min_mov = c->bi->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->bi);
+    n->next.push_back(nextn);
+    cas.push_back(c->bi);
   }
   //Hacia bd
-  if (c->bd != nullptr && c->bd->turno == -1 && c->bd->posibles < min_mov){
-    n->next = inicia_nodo(c->bd);
-    min_mov = c->bd->posibles;
-    next = c->bd;
+  if (c->bd != nullptr && c->bd->turno == -1 && c->bd->posibles <= min_mov){
+    if(c->bd->posibles < min_mov){
+      min_mov = c->bd->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->bd);
+    n->next.push_back(nextn);
+    cas.push_back(c->bd);
   }
   //Hacia ci
-  if (c->ci != nullptr && c->ci->turno == -1 && c->ci->posibles < min_mov){
-    n->next = inicia_nodo(c->ci);
-    min_mov = c->ci->posibles;
-    next = c->ci;
+  if (c->ci != nullptr && c->ci->turno == -1 && c->ci->posibles <= min_mov){
+    if(c->ci->posibles < min_mov){
+      min_mov = c->ci->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->ci);
+    n->next.push_back(nextn);
+    cas.push_back(c->ci);
   }
   //Hacia cd
-  if (c->cd != nullptr && c->cd->turno == -1 && c->cd->posibles < min_mov){
-    n->next = inicia_nodo(c->cd);
-    min_mov = c->cd->posibles;
-    next = c->cd;
+  if (c->cd != nullptr && c->cd->turno == -1 && c->cd->posibles <= min_mov){
+    if(c->cd->posibles < min_mov){
+      min_mov = c->cd->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->cd);
+    n->next.push_back(nextn);
+    cas.push_back(c->cd);
   }
   //Hacia di
-  if (c->di != nullptr && c->di->turno == -1 && c->di->posibles < min_mov){
-    n->next = inicia_nodo(c->di);
-    min_mov = c->di->posibles;
-    next = c->di;
+  if (c->di != nullptr && c->di->turno == -1 && c->di->posibles <= min_mov){
+    if(c->di->posibles < min_mov){
+      min_mov = c->di->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->di);
+    n->next.push_back(nextn);
+    cas.push_back(c->di);
   }
   //Hacia dd
-  if(c->dd != nullptr && c->dd->turno == -1 && c->dd->posibles < min_mov){
-    n->next = inicia_nodo(c->dd);
-    min_mov = c->dd->posibles;
-    next = c->dd;
+  if(c->dd != nullptr && c->dd->turno == -1 && c->dd->posibles <= min_mov){
+    if(c->dd->posibles < min_mov){
+      min_mov = c->dd->posibles;
+      n->next.clear();
+      cas.clear();
+    }
+    nextn = inicia_nodo(c->dd);
+    n->next.push_back(nextn);
+    cas.push_back(c->dd);
   }
-  if(next->ai != nullptr && next->ai->turno == -1){
-    next->ai->posibles--;
+
+  for(int i = 0; i < n->next.size(); i++){
+    if(crea_camino(cas[i], n->next[i], t+1)){
+      return true;
+    }else{
+      c->turno = -1;
+      if(c->ai != nullptr && c->ai->turno == -1){
+        c->ai->posibles++;
+      }
+      if(c->ad != nullptr && c->ad->turno == -1){
+        c->ad->posibles++;
+      }
+      if(c->bi != nullptr && c->bi->turno == -1){
+        c->bi->posibles++;
+      }
+      if(c->bd != nullptr && c->bd->turno == -1){
+        c->bd->posibles++;
+      }
+      if(c->ci != nullptr && c->ci->turno == -1){
+        c->ci->posibles++;
+      }
+      if(c->cd != nullptr && c->cd->turno == -1){
+        c->cd->posibles++;
+      }
+      if(c->di != nullptr && c->di->turno == -1){
+        c->di->posibles++;
+      }
+      if(c->dd != nullptr &&c->dd->turno == -1){
+        c->dd->posibles++;
+      }
+    }
   }
-  if(next->ad != nullptr && next->ad->turno == -1){
-    next->ad->posibles--;
-  }
-  if(next->bi != nullptr && next->bi->turno == -1){
-    next->bi->posibles--;
-  }
-  if(next->bd != nullptr && next->bd->turno == -1){
-    next->bd->posibles--;
-  }
-  if(next->ci != nullptr && next->ci->turno == -1){
-    next->ci->posibles--;
-  }
-  if(next->cd != nullptr && next->cd->turno == -1){
-    next->cd->posibles--;
-  }
-  if(next->di != nullptr && next->di->turno == -1){
-    next->di->posibles--;
-  }
-  if(next->dd != nullptr && next->dd->turno == -1){
-    next->dd->posibles--;
-  }
-  crea_camino(next, n->next, t+1);
-  //Si por ese nodo no se llega a una solucion, lo borra
-  if(!solucion){
-    podarrama(n);
-  }
-  //Reestablece la casilla para poder volver a usarla en otras ramas
-  c->turno = -1;
+  podarrama(n);
+
   //Retorna si llega a una solucion o no
-  return solucion;
+  return false;
 }
 
 //Wrapper para crear todos los caminos del arbol
@@ -283,7 +363,6 @@ Nodo * inicia_nodo(casilla *c){
   n->indice = c->indice;
   n->x = c->x;
   n->y = c->y;
-  n->next = nullptr;
   return n;
 }
 //##############################################################################################

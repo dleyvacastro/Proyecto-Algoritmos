@@ -49,6 +49,7 @@ public:
   casilla * get_inicial();
   casilla * get_inicio();
   int get_size();
+  void print_sol();
 };
 
 struct Nodo{
@@ -61,7 +62,7 @@ struct Nodo{
   int turno;
 
   //apuntadores a la siguiente casilla del camino
-  Nodo *next;
+  vector<Nodo*> next;
 };
 
 class ArbolD{
