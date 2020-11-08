@@ -174,7 +174,6 @@ ArbolD::~ArbolD(){
 //Poda una rama desde un nodo, recursivamente
 void ArbolD::podarrama(Nodo* &n){
   if(n != nullptr){
-    // cout << "borrando " <<  n->x << ", " << n->y << endl;
     for(int i = 0; i < n->next.size(); i++)
       podarrama(n->next[i]);
     delete n;
@@ -184,166 +183,139 @@ void ArbolD::podarrama(Nodo* &n){
 
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
 bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
-  // cout << n->x << ", " << n->y << ", " << t << endl;
-  n->turno = t;
+  T->print_sol();
+  cout << "standing in: "<< c->x << " " << c->y << endl;
   c->turno = t;
-  int min_mov = 9;
   Nodo *nextn = nullptr;
   vector<casilla*> cas;
+  vector<int> pos;
+  //T->print_sol();
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
+  cout << "turno: " << t << endl;
   if (solucion){
     cout << "camino hallado\n";
     return true;
   }
-  //Reduce el numero de posibilidades de las casillas alrededor
-  if(c->ai != nullptr && c->ai->turno == -1){
-    c->ai->posibles--;
-  }
-  if(c->ad != nullptr && c->ad->turno == -1){
-    c->ad->posibles--;
-  }
-  if(c->bi != nullptr && c->bi->turno == -1){
-    c->bi->posibles--;
-  }
-  if(c->bd != nullptr && c->bd->turno == -1){
-    c->bd->posibles--;
-  }
-  if(c->ci != nullptr && c->ci->turno == -1){
-    c->ci->posibles--;
-  }
-  if(c->cd != nullptr && c->cd->turno == -1){
-    c->cd->posibles--;
-  }
-  if(c->di != nullptr && c->di->turno == -1){
-    c->di->posibles--;
-  }
-  if(c->dd != nullptr &&c->dd->turno == -1){
-    c->dd->posibles--;
-  }
-  //Revisa si se puede mover a las casillas
+
+  //Revisa si se puede mover a las casillas, reduce las posibilidades por casilla
+  //y las agrega a los respectivos vectores
   //Hacia la ai
-  if (c->ai != nullptr && c->ai->turno == -1 && c->ai->posibles <= min_mov){
-    if(c->ai->posibles < min_mov){
-      min_mov = c->ai->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->ai != nullptr && c->ai->turno == -1){
+    c->ai->posibles--;
     nextn = inicia_nodo(c->ai);
+    pos.push_back(c->ai->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->ai);
   }
   //Hacia ad
-  if (c->ad != nullptr && c->ad->turno == -1 && c->ad->posibles <= min_mov){
-    if(c->ad->posibles < min_mov){
-      min_mov = c->ad->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->ad != nullptr && c->ad->turno == -1){
+    c->ad->posibles--;
     nextn = inicia_nodo(c->ad);
+    pos.push_back(c->ad->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->ad);
   }
   //Hacia bi
-  if (c->bi != nullptr && c->bi->turno == -1 && c->bi->posibles <= min_mov){
-    if(c->bi->posibles < min_mov){
-      min_mov = c->bi->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->bi != nullptr && c->bi->turno == -1){
+    c->bi->posibles--;
     nextn = inicia_nodo(c->bi);
+    pos.push_back(c->bi->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->bi);
   }
   //Hacia bd
-  if (c->bd != nullptr && c->bd->turno == -1 && c->bd->posibles <= min_mov){
-    if(c->bd->posibles < min_mov){
-      min_mov = c->bd->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->bd != nullptr && c->bd->turno == -1){
+    c->bd->posibles--;
     nextn = inicia_nodo(c->bd);
+    pos.push_back(c->bd->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->bd);
   }
   //Hacia ci
-  if (c->ci != nullptr && c->ci->turno == -1 && c->ci->posibles <= min_mov){
-    if(c->ci->posibles < min_mov){
-      min_mov = c->ci->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->ci != nullptr && c->ci->turno == -1){
+    c->ci->posibles--;
     nextn = inicia_nodo(c->ci);
+    pos.push_back(c->ci->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->ci);
   }
   //Hacia cd
-  if (c->cd != nullptr && c->cd->turno == -1 && c->cd->posibles <= min_mov){
-    if(c->cd->posibles < min_mov){
-      min_mov = c->cd->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->cd != nullptr && c->cd->turno == -1){
+    c->cd->posibles--;
     nextn = inicia_nodo(c->cd);
+    pos.push_back(c->cd->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->cd);
   }
   //Hacia di
-  if (c->di != nullptr && c->di->turno == -1 && c->di->posibles <= min_mov){
-    if(c->di->posibles < min_mov){
-      min_mov = c->di->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if (c->di != nullptr && c->di->turno == -1){
+    c->di->posibles--;
     nextn = inicia_nodo(c->di);
+    pos.push_back(c->di->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->di);
   }
   //Hacia dd
-  if(c->dd != nullptr && c->dd->turno == -1 && c->dd->posibles <= min_mov){
-    if(c->dd->posibles < min_mov){
-      min_mov = c->dd->posibles;
-      n->next.clear();
-      cas.clear();
-    }
+  if(c->dd != nullptr && c->dd->turno == -1){
+    c->dd->posibles--;
     nextn = inicia_nodo(c->dd);
+    pos.push_back(c->dd->posibles);
     n->next.push_back(nextn);
     cas.push_back(c->dd);
   }
 
-  for(int i = 0; i < n->next.size(); i++){
-    if(crea_camino(cas[i], n->next[i], t+1)){
-      return true;
-    }else{
-      c->turno = -1;
-      if(c->ai != nullptr && c->ai->turno == -1){
-        c->ai->posibles++;
-      }
-      if(c->ad != nullptr && c->ad->turno == -1){
-        c->ad->posibles++;
-      }
-      if(c->bi != nullptr && c->bi->turno == -1){
-        c->bi->posibles++;
-      }
-      if(c->bd != nullptr && c->bd->turno == -1){
-        c->bd->posibles++;
-      }
-      if(c->ci != nullptr && c->ci->turno == -1){
-        c->ci->posibles++;
-      }
-      if(c->cd != nullptr && c->cd->turno == -1){
-        c->cd->posibles++;
-      }
-      if(c->di != nullptr && c->di->turno == -1){
-        c->di->posibles++;
-      }
-      if(c->dd != nullptr &&c->dd->turno == -1){
-        c->dd->posibles++;
+  if(pos.size() > 0)
+    selectionSort(pos, n->next, cas);
+
+  cout << "standing in: "<< c->x << " " << c->y << endl;
+
+  /*cout << "Looking ady" << endl;
+  for(int i = 0; i < pos.size(); i++){
+    cout << "place: " << cas[i]->x << ", " << cas[i]->y << " ";
+    cout << "possibilities: " << pos[i] << " ";
+    cout << "node: " << n->next[i]->indice << " ";
+    cout << endl;
+  }*/
+  cout << "size:" << pos.size() << endl;
+  if(pos.size() > 0){
+    for(int i = 0; i < pos.size() - 1; i++){
+      //cout << cas[i]->x << " " << cas[i]->y << endl;
+      cout << "index" << i << endl;
+      if(crea_camino(cas[i], n->next[i], t+1)){
+        return true;
+      }else{
+        cout <<"returning state\n";
+        if(c->ai != nullptr && c->ai->turno == -1){
+          c->ai->posibles++;
+        }
+        if(c->ad != nullptr && c->ad->turno == -1){
+          c->ad->posibles++;
+        }
+        if(c->bi != nullptr && c->bi->turno == -1){
+          c->bi->posibles++;
+        }
+        if(c->bd != nullptr && c->bd->turno == -1){
+          c->bd->posibles++;
+        }
+        if(c->ci != nullptr && c->ci->turno == -1){
+          c->ci->posibles++;
+        }
+        if(c->cd != nullptr && c->cd->turno == -1){
+          c->cd->posibles++;
+        }
+        if(c->di != nullptr && c->di->turno == -1){
+          c->di->posibles++;
+        }
+        if(c->dd != nullptr &&c->dd->turno == -1){
+          c->dd->posibles++;
+        }
       }
     }
   }
+  c->turno = -1;
   podarrama(n);
-
+  cout << endl;
   //Retorna si llega a una solucion o no
   return false;
 }
@@ -361,8 +333,39 @@ void ArbolD::crear_caminos(){
 Nodo * inicia_nodo(casilla *c){
   Nodo *n = new Nodo;
   n->indice = c->indice;
-  n->x = c->x;
-  n->y = c->y;
   return n;
+}
+
+void selectionSort(vector<int>& vec,  vector<Nodo*>& node, vector<casilla*>& cas){
+  for(int i = 0; i < vec.size() - 1; i++){
+    int min_id = i;
+    // cout << "working in index: " << i;
+    for(int j = i; j < vec.size(); j++){
+        if(vec[j]<vec[min_id]){
+          min_id = j;
+        }
+        swap(i, min_id, vec);
+        swap(i, min_id, node);
+        swap(i, min_id, cas);
+    }
+  }
+}
+
+void swap(int i, int j, vector<int>& vec){
+  int cambio = vec[i];
+  vec[i] = vec[j];
+  vec[j] = cambio;
+}
+
+void swap(int i, int j, vector<Nodo*>& vec){
+  Nodo* cambio = vec[i];
+  vec[i] = vec[j];
+  vec[j] = cambio;
+}
+
+void swap(int i, int j, vector<casilla*>& vec){
+  casilla* cambio = vec[i];
+  vec[i] = vec[j];
+  vec[j] = cambio;
 }
 //##############################################################################################
