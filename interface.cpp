@@ -101,7 +101,7 @@ void Tablero::mostrartablero(){
     if(i % columnas == 0 ){
       cout << endl;
     }
-    cout << " [" << i << ": " << inicio[i].x << ", " << inicio[i].y << ", " << inicio[i].turno << "] ";
+    cout << " [" << i << ": " << inicio[i].x << ", " << inicio[i].y << ", " << inicio[i].turno << ", " << inicio[i].posibles << "] ";
   }
   cout << endl;
 
@@ -183,8 +183,6 @@ void ArbolD::podarrama(Nodo* &n){
 
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
 bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
-  T->print_sol();
-  cout << "standing in: "<< c->x << " " << c->y << endl;
   c->turno = t;
   Nodo *nextn = nullptr;
   vector<casilla*> cas;
@@ -192,7 +190,6 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   //T->print_sol();
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
-  cout << "turno: " << t << endl;
   if (solucion){
     cout << "camino hallado\n";
     return true;
@@ -268,54 +265,39 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   if(pos.size() > 0)
     selectionSort(pos, n->next, cas);
 
-  cout << "standing in: "<< c->x << " " << c->y << endl;
-
-  /*cout << "Looking ady" << endl;
   for(int i = 0; i < pos.size(); i++){
-    cout << "place: " << cas[i]->x << ", " << cas[i]->y << " ";
-    cout << "possibilities: " << pos[i] << " ";
-    cout << "node: " << n->next[i]->indice << " ";
-    cout << endl;
-  }*/
-  cout << "size:" << pos.size() << endl;
-  if(pos.size() > 0){
-    for(int i = 0; i < pos.size() - 1; i++){
-      //cout << cas[i]->x << " " << cas[i]->y << endl;
-      cout << "index" << i << endl;
-      if(crea_camino(cas[i], n->next[i], t+1)){
-        return true;
-      }else{
-        cout <<"returning state\n";
-        if(c->ai != nullptr && c->ai->turno == -1){
-          c->ai->posibles++;
-        }
-        if(c->ad != nullptr && c->ad->turno == -1){
-          c->ad->posibles++;
-        }
-        if(c->bi != nullptr && c->bi->turno == -1){
-          c->bi->posibles++;
-        }
-        if(c->bd != nullptr && c->bd->turno == -1){
-          c->bd->posibles++;
-        }
-        if(c->ci != nullptr && c->ci->turno == -1){
-          c->ci->posibles++;
-        }
-        if(c->cd != nullptr && c->cd->turno == -1){
-          c->cd->posibles++;
-        }
-        if(c->di != nullptr && c->di->turno == -1){
-          c->di->posibles++;
-        }
-        if(c->dd != nullptr &&c->dd->turno == -1){
-          c->dd->posibles++;
-        }
+    if(crea_camino(cas[i], n->next[i], t+1)){
+      return true;
+    }else{
+      if(c->ai != nullptr && c->ai->turno == -1){
+        c->ai->posibles++;
+      }
+      if(c->ad != nullptr && c->ad->turno == -1){
+        c->ad->posibles++;
+      }
+      if(c->bi != nullptr && c->bi->turno == -1){
+        c->bi->posibles++;
+      }
+      if(c->bd != nullptr && c->bd->turno == -1){
+        c->bd->posibles++;
+      }
+      if(c->ci != nullptr && c->ci->turno == -1){
+        c->ci->posibles++;
+      }
+      if(c->cd != nullptr && c->cd->turno == -1){
+        c->cd->posibles++;
+      }
+      if(c->di != nullptr && c->di->turno == -1){
+        c->di->posibles++;
+      }
+      if(c->dd != nullptr &&c->dd->turno == -1){
+        c->dd->posibles++;
       }
     }
   }
   c->turno = -1;
   podarrama(n);
-  cout << endl;
+
   //Retorna si llega a una solucion o no
   return false;
 }
@@ -337,21 +319,21 @@ Nodo * inicia_nodo(casilla *c){
 }
 
 void selectionSort(vector<int>& vec,  vector<Nodo*>& node, vector<casilla*>& cas){
-  for(int i = 0; i < vec.size() - 1; i++){
+  for(int i = 0; i<vec.size()-1;++i){
     int min_id = i;
-    // cout << "working in index: " << i;
-    for(int j = i; j < vec.size(); j++){
+    for(int j = i; j<vec.size();++j){
         if(vec[j]<vec[min_id]){
           min_id = j;
         }
-        swap(i, min_id, vec);
-        swap(i, min_id, node);
-        swap(i, min_id, cas);
-    }
+      }
+    swap(i, min_id, vec);
+    swap(i, min_id, node);
+    swap(i, min_id, cas);
   }
 }
 
 void swap(int i, int j, vector<int>& vec){
+  //cout << vec[i] <<  endl;
   int cambio = vec[i];
   vec[i] = vec[j];
   vec[j] = cambio;
