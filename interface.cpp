@@ -183,11 +183,12 @@ void ArbolD::podarrama(Nodo* &n){
 
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
 bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
+  // T->print_sol();
+  // cout << "standing in: " << c->x << ", " << c->y << endl;
   c->turno = t;
   Nodo *nextn = nullptr;
   vector<casilla*> cas;
   vector<int> pos;
-  //T->print_sol();
   //Si llega al final tiene una solucion
   bool solucion = (t == T->get_size() - 1);
   if (solucion){
@@ -266,34 +267,35 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
     selectionSort(pos, n->next, cas);
 
   for(int i = 0; i < pos.size(); i++){
+    // cout << "possibilites in " << cas[i]->x
+    //   << ", " << cas[i]->y <<": " << pos[i] << endl;
     if(crea_camino(cas[i], n->next[i], t+1)){
       return true;
-    }else{
-      if(c->ai != nullptr && c->ai->turno == -1){
-        c->ai->posibles++;
-      }
-      if(c->ad != nullptr && c->ad->turno == -1){
-        c->ad->posibles++;
-      }
-      if(c->bi != nullptr && c->bi->turno == -1){
-        c->bi->posibles++;
-      }
-      if(c->bd != nullptr && c->bd->turno == -1){
-        c->bd->posibles++;
-      }
-      if(c->ci != nullptr && c->ci->turno == -1){
-        c->ci->posibles++;
-      }
-      if(c->cd != nullptr && c->cd->turno == -1){
-        c->cd->posibles++;
-      }
-      if(c->di != nullptr && c->di->turno == -1){
-        c->di->posibles++;
-      }
-      if(c->dd != nullptr &&c->dd->turno == -1){
-        c->dd->posibles++;
-      }
     }
+  }
+  if(c->ai != nullptr && c->ai->turno == -1){
+    c->ai->posibles++;
+  }
+  if(c->ad != nullptr && c->ad->turno == -1){
+    c->ad->posibles++;
+  }
+  if(c->bi != nullptr && c->bi->turno == -1){
+    c->bi->posibles++;
+  }
+  if(c->bd != nullptr && c->bd->turno == -1){
+    c->bd->posibles++;
+  }
+  if(c->ci != nullptr && c->ci->turno == -1){
+    c->ci->posibles++;
+  }
+  if(c->cd != nullptr && c->cd->turno == -1){
+    c->cd->posibles++;
+  }
+  if(c->di != nullptr && c->di->turno == -1){
+    c->di->posibles++;
+  }
+  if(c->dd != nullptr &&c->dd->turno == -1){
+    c->dd->posibles++;
   }
   c->turno = -1;
   podarrama(n);
