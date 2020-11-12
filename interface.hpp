@@ -41,6 +41,7 @@ private:
   int filas;
   int size;
   void inicializar_casillas();
+  void Aumentar_posibilidades(int x, int y) {inicio[x].posibles++; inicio[y].posibles++;}
 public:
   Tablero(int n, int m);
   ~Tablero();
@@ -55,12 +56,6 @@ public:
 struct Nodo{
   //indice en el arreglo
   int indice;
-  //coordenada (x,y)
-  int x;
-  int y;
-  //turno en que el caballo esta en la casilla
-  int turno;
-
   //apuntadores a la siguiente casilla del camino
   vector<Nodo*> next;
 };
@@ -71,6 +66,7 @@ private:
   Tablero *T;
   void podarrama(Nodo* &n);
   bool crea_camino(casilla *c, Nodo* &n, int t);
+  void asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector<int> &pos, Nodo* &n);
 public:
   ArbolD(Tablero *k);
   ~ArbolD();
@@ -78,5 +74,8 @@ public:
 };
 
 Nodo * inicia_nodo(casilla *c);
-
+void selectionSort(vector<int>& vec,  vector<Nodo*>& node, vector<casilla*>& cas);
+void swap(int i, int j, vector<int>& vec);
+void swap(int i, int j, vector<Nodo*>& vec);
+void swap(int i, int j, vector<casilla*>& vec);
 #endif
