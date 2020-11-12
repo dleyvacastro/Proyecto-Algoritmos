@@ -1,10 +1,17 @@
 #include "interface.hpp"
 
 int main(){
-  Tablero hola(6, 6);
-  hola.set_inicial(5, 5);
-  hola.mostrartablero();
-  ArbolD chao(&hola);
-  chao.crear_caminos();
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 8; j++){
+      Tablero tablero(8, 8);
+      cout << "/-------------------------/" << endl;
+      cout << "inicial: " << i << ", " << j << endl;
+      tablero.set_inicial(i, j);
+      ArbolD arbol(&tablero);
+      arbol.crear_caminos();
+      tablero.print_sol();
+
+    }
+  }
   return 0;
 }
