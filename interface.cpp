@@ -42,32 +42,28 @@ void Tablero::inicializar_casillas(){
       int j = (columnas * (inicio[i].y+1)) + inicio[i].x + 2;
       inicio[i].dd = &inicio[j];
       inicio[j].ai = &inicio[i];
-      inicio[i].posibles++;
-      inicio[j].posibles++;
+      Aumentar_posibilidades(i, j);
     }
     //if que inicializa el puntero de la casilla del cuadrante d izquierda y su espejo
     if((inicio[i].x + 1) >= 0 && (inicio[i].x + 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x + 1;
       inicio[i].di = &inicio[j];
       inicio[j].ad = &inicio[i];
-      inicio[i].posibles++;
-      inicio[j].posibles++;
+      Aumentar_posibilidades(i, j);
     }
     //if que inicializa el puntero de la casilla del cuadrante c derecha y su espejo
     if((inicio[i].x - 1) >= 0 && (inicio[i].x - 1) < columnas && (inicio[i].y + 2) >= 0 && (inicio[i].y + 2) < filas ){
       int j = (columnas * (inicio[i].y+2)) + inicio[i].x - 1;
       inicio[i].cd = &inicio[j];
       inicio[j].bi = &inicio[i];
-      inicio[i].posibles++;
-      inicio[j].posibles++;
+      Aumentar_posibilidades(i, j);
     }
     //if que inicializa el puntero de la casilla del cuadrante c izquierda y su espejo
     if((inicio[i].x - 2) >= 0 && (inicio[i].x - 2) < columnas && (inicio[i].y + 1) >= 0 && (inicio[i].y + 1) < filas ){
       int j = (columnas * (inicio[i].y+1)) + inicio[i].x - 2;
       inicio[i].ci = &inicio[j];
       inicio[j].bd = &inicio[i];
-      inicio[i].posibles++;
-      inicio[j].posibles++;
+      Aumentar_posibilidades(i, j);
     }
   }
 }
@@ -181,6 +177,14 @@ void ArbolD::podarrama(Nodo* &n){
   }
 }
 
+void ArbolD::asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector<int> &pos, Nodo* &n){
+  a->posibles--;
+  nextn = inicia_nodo(a);
+  pos.push_back(a->posibles);
+  n->next.push_back(nextn);
+  cas.push_back(a);
+}
+
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
 bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   // T->print_sol();
@@ -200,67 +204,35 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
   //y las agrega a los respectivos vectores
   //Hacia la ai
   if (c->ai != nullptr && c->ai->turno == -1){
-    c->ai->posibles--;
-    nextn = inicia_nodo(c->ai);
-    pos.push_back(c->ai->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->ai);
+    asignar_vecs(c->ai, nextn, cas, pos, n);
   }
   //Hacia ad
   if (c->ad != nullptr && c->ad->turno == -1){
-    c->ad->posibles--;
-    nextn = inicia_nodo(c->ad);
-    pos.push_back(c->ad->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->ad);
+    asignar_vecs(c->ad, nextn, cas, pos, n);
   }
   //Hacia bi
   if (c->bi != nullptr && c->bi->turno == -1){
-    c->bi->posibles--;
-    nextn = inicia_nodo(c->bi);
-    pos.push_back(c->bi->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->bi);
+    asignar_vecs(c->bi, nextn, cas, pos, n);
   }
   //Hacia bd
   if (c->bd != nullptr && c->bd->turno == -1){
-    c->bd->posibles--;
-    nextn = inicia_nodo(c->bd);
-    pos.push_back(c->bd->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->bd);
+    asignar_vecs(c->bd, nextn, cas, pos, n);
   }
   //Hacia ci
   if (c->ci != nullptr && c->ci->turno == -1){
-    c->ci->posibles--;
-    nextn = inicia_nodo(c->ci);
-    pos.push_back(c->ci->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->ci);
+    asignar_vecs(c->ci, nextn, cas, pos, n);
   }
   //Hacia cd
   if (c->cd != nullptr && c->cd->turno == -1){
-    c->cd->posibles--;
-    nextn = inicia_nodo(c->cd);
-    pos.push_back(c->cd->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->cd);
+    asignar_vecs(c->cd, nextn, cas, pos, n);
   }
   //Hacia di
   if (c->di != nullptr && c->di->turno == -1){
-    c->di->posibles--;
-    nextn = inicia_nodo(c->di);
-    pos.push_back(c->di->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->di);
+    asignar_vecs(c->di, nextn, cas, pos, n);
   }
   //Hacia dd
   if(c->dd != nullptr && c->dd->turno == -1){
-    c->dd->posibles--;
-    nextn = inicia_nodo(c->dd);
-    pos.push_back(c->dd->posibles);
-    n->next.push_back(nextn);
-    cas.push_back(c->dd);
+    asignar_vecs(c->dd, nextn, cas, pos, n);
   }
 
   if(pos.size() > 0)

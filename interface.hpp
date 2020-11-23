@@ -41,6 +41,7 @@ private:
   int filas;
   int size;
   void inicializar_casillas();
+  void Aumentar_posibilidades(int x, int y) {inicio[x].posibles++; inicio[y].posibles++;}
 public:
   Tablero(int n, int m);
   ~Tablero();
@@ -65,6 +66,7 @@ private:
   Tablero *T;
   void podarrama(Nodo* &n);
   bool crea_camino(casilla *c, Nodo* &n, int t);
+  void asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector<int> &pos, Nodo* &n);
 public:
   ArbolD(Tablero *k);
   ~ArbolD();
