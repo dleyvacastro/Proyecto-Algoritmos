@@ -7,7 +7,7 @@ int main(){
       cout << "/-------------------------/" << endl;
       cout << "inicial: " << i << ", " << j << endl;
       tablero.set_inicial(i, j);
-      ArbolD arbol(&tablero);
+      ListaD arbol(&tablero);
       arbol.crear_caminos();
       tablero.print_sol();
     }

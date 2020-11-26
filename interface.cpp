@@ -153,22 +153,22 @@ void Tablero::print_sol(){
 //##############################################################################################
 
 
-//ArbolD
+//ListaD
 //##############################################################################################
 
 //Constructor, recibe un tablero hecho para trabajar
-ArbolD::ArbolD(Tablero *k){
+ListaD::ListaD(Tablero *k){
   T = k;
   raiz = inicia_nodo(T->get_inicial());
 }
 //Destructor
-ArbolD::~ArbolD(){
+ListaD::~ListaD(){
   podarrama(raiz);
   cout << "destruyendo arbol\n";
 }
 
 //Poda una rama desde un nodo, recursivamente
-void ArbolD::podarrama(Nodo* &n){
+void ListaD::podarrama(Nodo* &n){
   if(n != nullptr){
     for(int i = 0; i < n->next.size(); i++)
       podarrama(n->next[i]);
@@ -177,7 +177,7 @@ void ArbolD::podarrama(Nodo* &n){
   }
 }
 
-void ArbolD::asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector<int> &pos, Nodo* &n){
+void ListaD::asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector<int> &pos, Nodo* &n){
   a->posibles--;
   nextn = inicia_nodo(a);
   pos.push_back(a->posibles);
@@ -186,7 +186,7 @@ void ArbolD::asignar_vecs(casilla *a, Nodo *nextn, vector<casilla*> &cas, vector
 }
 
 //Crea un camino a partir de un nodo, recibe la casilla correspondiente a ese nodo, el nodo desde que se crea y el turno
-bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
+bool ListaD::crea_camino(casilla *c, Nodo* &n, int t){
   // T->print_sol();
   // cout << "standing in: " << c->x << ", " << c->y << endl;
   c->turno = t;
@@ -277,7 +277,7 @@ bool ArbolD::crea_camino(casilla *c, Nodo* &n, int t){
 }
 
 //Wrapper para crear todos los caminos del arbol
-void ArbolD::crear_caminos(){
+void ListaD::crear_caminos(){
   casilla *c = &(T->get_inicio()[raiz->indice]);
   crea_camino(c, raiz, 0);
   cout << "arbol hecho\n";
