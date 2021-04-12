@@ -12,5 +12,12 @@ int main(){
       tablero.print_sol();
     }
   }
+
+  //Peor caso
+  // Tablero tablero(7,7);
+  // tablero.set_inicial(0,1);
+  // ListaD lista(&tablero);
+  // lista.crear_caminos();
+  // tablero.print_sol();
   return 0;
 }
